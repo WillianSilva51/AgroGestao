@@ -1,0 +1,6 @@
+psycopg
+psycopg-pool
+fastapi
+streamlit
+pydantic-settings
+uvicorn
