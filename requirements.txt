@@ -4,3 +4,8 @@ fastapi
 streamlit
 pydantic-settings
 uvicorn
+pandas
+sqlalchemy
+panel
+python-dotenv
+nbconvert
