@@ -80,15 +80,14 @@ CREATE TABLE IF NOT EXISTS Cultivo
 
 CREATE TABLE IF NOT EXISTS Visita_tecnica
 (
+  id_visita SERIAL NOT NULL,
   data_visita DATE NOT NULL,
   observacoes VARCHAR(150) NOT NULL,
   anexos BYTEA,
   id_tecnico INTEGER NOT NULL,
-  id_produtor INTEGER NOT NULL,
   id_propriedade INTEGER NOT NULL,
-  PRIMARY KEY (id_tecnico, id_produtor, id_propriedade, data_visita),
+  PRIMARY KEY (id_visita),
   FOREIGN KEY (id_tecnico) REFERENCES Tecnico(id_pessoa),
-  FOREIGN KEY (id_produtor) REFERENCES Produtor(id_pessoa),
   FOREIGN KEY (id_propriedade) REFERENCES Propriedade(id_propriedade)
 );
 
@@ -132,12 +131,13 @@ CREATE TABLE IF NOT EXISTS Possui_propriedade
 
 CREATE TABLE IF NOT EXISTS Plantio
 (
+  id_plantio SERIAL NOT NULL,
   data_plantio DATE NOT NULL,
   area_plantada_hectares NUMERIC(10, 2) NOT NULL,
   id_propriedade INTEGER NOT NULL,
   id_safra INTEGER NOT NULL,
   id_cultivo INTEGER NOT NULL,
-  PRIMARY KEY (id_propriedade, id_safra, id_cultivo),
+  PRIMARY KEY (id_plantio),
   FOREIGN KEY (id_propriedade) REFERENCES Propriedade(id_propriedade),
   FOREIGN KEY (id_safra) REFERENCES Safra(id_safra),
   FOREIGN KEY (id_cultivo) REFERENCES Cultivo(id_cultivo),
@@ -150,11 +150,9 @@ CREATE TABLE IF NOT EXISTS Ocorrencia
   tipo_problema VARCHAR(100) NOT NULL,
   descricao VARCHAR(100) NOT NULL,
   data_ocorrencia DATE NOT NULL,
-  id_propriedade INTEGER NOT NULL,
-  id_safra INTEGER NOT NULL,
-  id_cultivo INTEGER NOT NULL,
-  PRIMARY KEY (id_ocorrencia, id_propriedade, id_safra, id_cultivo),
-  FOREIGN KEY (id_propriedade, id_safra, id_cultivo) REFERENCES Plantio(id_propriedade, id_safra, id_cultivo)
+  id_plantio INTEGER NOT NULL,
+  PRIMARY KEY (id_ocorrencia, id_plantio),
+  FOREIGN KEY (id_plantio) REFERENCES Plantio(id_plantio)
   ON DELETE CASCADE
 );
 
@@ -164,11 +162,9 @@ CREATE TABLE IF NOT EXISTS Colheita
   data_colheita DATE NOT NULL,
   quantidade_colheita INTEGER NOT NULL,
   unidade_medida VARCHAR(20) NOT NULL,
-  id_propriedade INTEGER NOT NULL,
-  id_safra INTEGER NOT NULL,
-  id_cultivo INTEGER NOT NULL,
-  PRIMARY KEY (id_colheita, id_propriedade, id_safra, id_cultivo),
-  FOREIGN KEY (id_propriedade, id_safra, id_cultivo) REFERENCES Plantio(id_propriedade, id_safra, id_cultivo)
+  id_plantio INTEGER NOT NULL,
+  PRIMARY KEY (id_colheita, id_plantio),
+  FOREIGN KEY (id_plantio) REFERENCES Plantio(id_plantio)
   ON DELETE CASCADE,
   CONSTRAINT chk_qtd_colhida_positiva CHECK (quantidade_colheita > 0)
 );
@@ -188,7 +184,6 @@ CREATE INDEX IF NOT EXISTS idx_tecnico_pessoa ON Tecnico(id_pessoa);
 CREATE INDEX IF NOT EXISTS idx_municipio_uf ON Municipio(uf);
 CREATE INDEX IF NOT EXISTS idx_propriedade_municipio ON Propriedade(id_municipio);
 CREATE INDEX IF NOT EXISTS idx_visita_tecnico ON Visita_tecnica(id_tecnico);
-CREATE INDEX IF NOT EXISTS idx_visita_produtor ON Visita_tecnica(id_produtor);
 CREATE INDEX IF NOT EXISTS idx_visita_propriedade ON Visita_tecnica(id_propriedade);
 CREATE INDEX IF NOT EXISTS idx_alerta_recebido_produtor ON Alerta_recebido(id_produtor);
 CREATE INDEX IF NOT EXISTS idx_valor_mercado_produtor ON Valor_mercado(id_produtor);
