@@ -21,7 +21,7 @@ async def get_pool():
     """
     global _pool
     if _pool is None:
-        _pool = AsyncConnectionPool(conninfo=DATABASE_URL, open=False, )
+        _pool = AsyncConnectionPool(conninfo=DATABASE_URL, open=False)
         await _pool.open()
     return _pool
 
