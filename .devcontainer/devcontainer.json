@@ -1,0 +1,23 @@
+{
+  "name": "Devbox Remote Container",
+  "build": {
+    "dockerfile": "./dockerfile",
+    "context": ".."
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000
+      },
+      "extensions": [
+        "jetpack-io.devbox",
+        "ms-python.python",
+        "kevinrose.vsc-python-indent",
+        "vscode-icons-team.vscode-icons",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  },
+  "remoteUser": "devbox"
+}
