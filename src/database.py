@@ -5,7 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 if "DATABASE_URL" not in os.environ:
-    raise EnvironmentError("DATABASE_URL not found in environment variables.")
+    raise EnvironmentError(
+        "DATABASE_URL not found in environment variables. Please ensure DATABASE_URL is set "
+        "in your .env file or environment variables."
+    )
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 
