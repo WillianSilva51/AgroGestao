@@ -17,7 +17,8 @@
       "if [ -f requirements.txt ]; then python -m pip install -r requirements.txt > /dev/null 2>&1 && echo \"Dependencies check passed\"; fi"
     ],
     "scripts": {
-      "run": "python crud.py",
+      "run": "panel serve Dashboard.ipynb --autoreload --show",
+      "db:reset": "python -m src.init_db",
       "db:access": "psql $DATABASE_URL"
     }
   }
