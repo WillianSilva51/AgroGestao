@@ -28,8 +28,6 @@ async def listar():
             
             df = pd.DataFrame(res, columns=colunas)
             
-            # --- CORREÇÃO DO ERRO DECIMAL ---
-            # Converte a coluna de área para float (número que o Python entende)
             df["Área (ha)"] = df["Área (ha)"].astype(float)
             
             return df
