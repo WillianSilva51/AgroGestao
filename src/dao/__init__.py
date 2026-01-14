@@ -1,3 +1,3 @@
-from . import propriedade_dao, plantio_dao, produtor_dao
+from . import pessoa_dao, propriedade_dao, plantio_dao
 
-__all__ = ["plantio_dao", "propriedade_dao", "produtor_dao"]
+__all__ = ["plantio_dao", "propriedade_dao", "pessoa_dao"]

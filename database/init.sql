@@ -224,3 +224,66 @@ INSERT INTO Estado (uf, nome_estado) VALUES
 ('SP', 'São Paulo'),
 ('SE', 'Sergipe'),
 ('TO', 'Tocantins');
+
+INSERT INTO Cultivo (nome_cultura, descricao, variedade) VALUES
+('Soja', 'Cultura de soja para produção de grãos', 'BRS 1010'),
+('Milho', 'Cultura de milho para alimentação animal e humana', 'AG 1051'),
+('Café', 'Cultura de café arábica de alta qualidade', 'Mundo Novo'),
+('Algodão', 'Cultura de algodão herbáceo para indústria têxtil', 'FM 966'),
+('Cana-de-açúcar', 'Cultura de cana-de-açúcar para produção de açúcar e etanol', 'RB 92579'),
+('Trigo', 'Cultura de trigo para produção de farinha', 'BRS 264'),
+('Arroz', 'Cultura de arroz irrigado para consumo humano', 'IRGA 424'),
+('Feijão', 'Cultura de feijão carioca para alimentação', 'BRS Campeiro');
+
+INSERT INTO Safra (descricao_safra, ano_agricola, data_inicio, data_fim) VALUES
+('Safra de Verão', '2023/2024', '2023-10-01', '2024-03-31'),
+('Safra de Inverno', '2024', '2024-04-01', '2024-09-30'),
+('Safra de Verão', '2024/2025', '2024-10-01', '2025-03-31'),
+('Safra de Inverno', '2025', '2025-04-01', '2025-09-30'),
+('Safra de Verão', '2025/2026', '2025-10-01', '2026-03-31'),
+('Safra de Inverno', '2026', '2026-04-01', '2026-09-30');
+
+INSERT INTO Pessoa (cpf, nome, data_nascimento) VALUES
+('51651216514', 'Fernando Almeida', '2005-04-20'),
+('12345678901', 'João Silva', '1980-05-15'),
+('23456789012', 'Maria Oliveira', '1975-08-22'),
+('34567890123', 'Carlos Souza', '1990-11-30'),
+('45678901234', 'Ana Pereira', '1985-02-10'),
+('56789012345', 'Pedro Costa', '1978-07-05'),
+('67890123456', 'Luciana Fernandes', '1992-12-18'),
+('78901234567', 'Rafael Gomes', '1983-03-25'),
+('89012345678', 'Fernanda Ribeiro', '1979-09-14');
+
+INSERT INTO Produtor (inscricao_estadual, id_pessoa) VALUES
+('IE1234567890', 1),
+('IE2345678901', 2),
+('IE3456789012', 3),
+('IE4567890123', 4),
+('IE5678901234', 9);
+
+INSERT INTO Tecnico (crea, id_pessoa) VALUES
+('CREA1234567', 5),
+('CREA2345678', 6),
+('CREA3456789', 7),
+('CREA4567890', 8),
+('CREA5678901', 9);
+
+INSERT INTO Municipio (nome_municipio, uf) VALUES
+('São Paulo', 'SP'),
+('Rio de Janeiro', 'RJ'),
+('Belo Horizonte', 'MG'),
+('Curitiba', 'PR'),
+('Salvador', 'BA'),
+('Fortaleza', 'CE'),
+('Manaus', 'AM'),
+('Porto Alegre', 'RS'),
+('Recife', 'PE'),
+('Goiânia', 'GO'),
+('Quixadá', 'CE'),
+('Campina Grande', 'PB');
+
+INSERT INTO Propriedade (nome_propriedade, registro_imovel, area_total_hectares, logradouro, numero, cep, id_municipio) VALUES
+('Fazenda Boa Vista', 'REG123456', 150.75, 'Estrada da Boa Vista', '100', '12345000', 11),
+('Sítio Recanto Feliz', 'REG234567', 85.50, 'Rua das Flores', '250', '23456000', 12),
+('Fazenda Santa Clara', 'REG345678', 200.00, 'Avenida Central', '500', '34567000', 1),
+('Chácara Vale Verde', 'REG456789', 60.25, 'Travessa do Sol', '75', '45678000', 11);
