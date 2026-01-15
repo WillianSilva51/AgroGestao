@@ -2,7 +2,7 @@ import pandas as pd
 from src.database import get_pool
 
 # --- 1. LISTAR (JOIN COM NOMES REAIS) ---
-async def listar():
+async def listar(filtro_safra=""):
     pool = await get_pool()
     async with pool.connection() as conn:
         async with conn.cursor() as cur:
@@ -18,16 +18,22 @@ async def listar():
                 JOIN Safra s ON pl.id_safra = s.id_safra
                 JOIN Cultivo c ON pl.id_cultivo = c.id_cultivo
                 JOIN Propriedade prop ON pl.id_propriedade = prop.id_propriedade
-                ORDER BY pl.data_plantio DESC
             """
-            await cur.execute(sql)
+            params = []
+            if filtro_safra:
+                sql += " WHERE s.descricao_safra ILIKE %s OR s.ano_agricola ILIKE %s"
+                params.append(f"%{filtro_safra}%")
+                params.append(f"%{filtro_safra}%")
+            
+            sql += " ORDER BY pl.data_plantio DESC"
+            
+            await cur.execute(sql, params)
             res = await cur.fetchall()
             
             colunas = ["id", "Safra", "Cultura", "Propriedade", "Data Plantio", "Área (ha)"]
             if not res: return pd.DataFrame(columns=colunas)
             
             df = pd.DataFrame(res, columns=colunas)
-            
             df["Área (ha)"] = df["Área (ha)"].astype(float)
             
             return df
