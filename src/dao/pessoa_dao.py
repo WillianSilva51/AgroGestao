@@ -37,8 +37,8 @@ async def listar(filtro_nome=""):
             df = pd.DataFrame(res, columns=colunas)
             
             # Converte booleans para True/False visuais
-            df["É Produtor?"] = df["É Produtor?"].astype(bool)
-            df["É Técnico?"] = df["É Técnico?"].astype(bool)
+            df["É Produtor?"] = df["É Produtor?"].apply(lambda x: "Sim" if x else "Não")
+            df["É Técnico?"] = df["É Técnico?"].apply(lambda x: "Sim" if x else "Não")
             
             return df
 
