@@ -1,7 +1,7 @@
 import pandas as pd
 from src.database import get_pool
 
-# --- 1. LISTAR (COM JOIN EM MUNICÍPIO) ---
+# --- 1. LISTAR ---
 async def listar(filtro_nome=""):
     pool = await get_pool()
     async with pool.connection() as conn:
@@ -30,21 +30,18 @@ async def listar(filtro_nome=""):
             await cur.execute(sql, params)
             res = await cur.fetchall()
             
-            # Nomes amigáveis para a tabela
             colunas = ["id", "Nome", "Registro", "Localização", "Área (ha)", "Logradouro", "Num", "CEP", "id_mun_oculto"]
             
             if not res: return pd.DataFrame(columns=colunas)
             
             df = pd.DataFrame(res, columns=colunas)
-            
-            # CORREÇÃO DO ERRO DECIMAL (CRUCIAL!)
+            # Converte Decimal para Float
             df["Área (ha)"] = df["Área (ha)"].astype(float)
             
             return df
 
-# --- 2. AUXILIAR (MENU DE MUNICÍPIOS) ---
+# --- 2. AUXILIAR (MENU) ---
 async def get_opcoes_municipio():
-    """Retorna dicionário {'Quixadá - CE': 1, ...}"""
     pool = await get_pool()
     async with pool.connection() as conn:
         async with conn.cursor() as cur:
@@ -52,7 +49,7 @@ async def get_opcoes_municipio():
             res = await cur.fetchall()
             return {row[0]: row[1] for row in res}
 
-# --- 3. CRUD (INSERIR, ATUALIZAR, EXCLUIR) ---
+# --- 3. CRUD ---
 async def inserir(nome, registro, area, logradouro, numero, cep, id_municipio):
     pool = await get_pool()
     async with pool.connection() as conn:
@@ -77,7 +74,7 @@ async def excluir(id_prop):
     async with pool.connection() as conn:
         await conn.execute("DELETE FROM Propriedade WHERE id_propriedade=%s", (id_prop,))
 
-# --- 4. GRÁFICO (AGREGAÇÃO) ---
+# --- 4. GRÁFICO ---
 async def dados_grafico_municipio():
     pool = await get_pool()
     async with pool.connection() as conn:
@@ -93,7 +90,6 @@ async def dados_grafico_municipio():
             res = await cur.fetchall()
             df = pd.DataFrame(res, columns=["Município", "Total Hectares"])
             
-            # CORREÇÃO DECIMAL
             if not df.empty:
                 df["Total Hectares"] = df["Total Hectares"].astype(float)
             

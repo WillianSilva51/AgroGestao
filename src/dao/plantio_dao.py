@@ -1,7 +1,7 @@
 import pandas as pd
 from src.database import get_pool
 
-# --- 1. LISTAR (JOIN COM NOMES REAIS) ---
+# --- 1. LISTAR (COM FILTRO DE SAFRA) ---
 async def listar(filtro_safra=""):
     pool = await get_pool()
     async with pool.connection() as conn:
@@ -20,6 +20,8 @@ async def listar(filtro_safra=""):
                 JOIN Propriedade prop ON pl.id_propriedade = prop.id_propriedade
             """
             params = []
+            
+            # Lógica de Filtro: Busca por Nome da Safra OU Ano Agrícola
             if filtro_safra:
                 sql += " WHERE s.descricao_safra ILIKE %s OR s.ano_agricola ILIKE %s"
                 params.append(f"%{filtro_safra}%")
@@ -34,6 +36,7 @@ async def listar(filtro_safra=""):
             if not res: return pd.DataFrame(columns=colunas)
             
             df = pd.DataFrame(res, columns=colunas)
+            # Converte Decimal para Float (Correção do erro de serialização)
             df["Área (ha)"] = df["Área (ha)"].astype(float)
             
             return df
@@ -43,7 +46,6 @@ async def get_opcoes_safra():
     pool = await get_pool()
     async with pool.connection() as conn:
         async with conn.cursor() as cur:
-            # Concatena descricao e ano para ficar bonito no menu
             await cur.execute("SELECT descricao_safra || ' ' || ano_agricola, id_safra FROM Safra ORDER BY ano_agricola DESC")
             res = await cur.fetchall()
             return {row[0]: row[1] for row in res}
@@ -52,7 +54,6 @@ async def get_opcoes_cultivo():
     pool = await get_pool()
     async with pool.connection() as conn:
         async with conn.cursor() as cur:
-            # Mostra Cultura + Variedade
             await cur.execute("SELECT nome_cultura || ' (' || variedade || ')', id_cultivo FROM Cultivo ORDER BY nome_cultura")
             res = await cur.fetchall()
             return {row[0]: row[1] for row in res}
@@ -91,7 +92,6 @@ async def excluir(id_plantio):
 
 # --- 4. GRÁFICO ---
 async def dados_grafico_cultura():
-    """Conta hectares plantados por tipo de cultura"""
     pool = await get_pool()
     async with pool.connection() as conn:
         async with conn.cursor() as cur:
@@ -102,4 +102,9 @@ async def dados_grafico_cultura():
                 GROUP BY c.nome_cultura
             """)
             res = await cur.fetchall()
-            return pd.DataFrame(res, columns=["Cultura", "Total Hectares"])
+            df = pd.DataFrame(res, columns=["Cultura", "Total Hectares"])
+            
+            if not df.empty:
+                df["Total Hectares"] = df["Total Hectares"].astype(float)
+                
+            return df
